@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Victor Ofili · USMLE Vault</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07101f;--surface:#0d1b30;--card:#0f1f38;--border:#1a2e4a;
+  --gold:#e4a81a;--text:#e2e8f0;--muted:#64748b;--dim:#475569;
+  --green:#22c55e;--green-bg:#052e16;
+  --blue:#60a5fa;--blue-bg:#0c1e3c;
+  --amber:#f59e0b;--amber-bg:#1c1200;
+  --red:#f87171;--red-bg:#1f0404;
+  --purple:#a78bfa;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);padding:20px 16px 80px;line-height:1.5}
+.wrap{max-width:820px;margin:0 auto}
+
+/* ── TOPBAR ── */
+.topbar{display:flex;justify-content:space-between;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--border);margin-bottom:24px}
+.brand{font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--gold);text-transform:uppercase}
+.meta{font-size:11px;color:var(--dim)}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#0b1627,#0e1f3a);border:1px solid var(--border);border-radius:16px;padding:28px 28px 24px;margin-bottom:18px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;top:-40px;right:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(228,168,26,.07),transparent 70%);pointer-events:none}
+.hero-name{font-size:28px;font-weight:800;margin-bottom:3px;letter-spacing:-.02em}
+.hero-contact{font-size:12px;color:var(--muted);margin-bottom:14px}
+.countdown-pill{display:inline-flex;align-items:center;gap:7px;background:rgba(228,168,26,.1);border:1px solid rgba(228,168,26,.28);border-radius:20px;padding:5px 14px;font-size:12.5px;font-weight:700;color:var(--gold);margin-bottom:20px}
+.stats-row{display:flex;gap:12px;flex-wrap:wrap}
+.stat{flex:1;min-width:90px;background:rgba(255,255,255,.035);border:1px solid var(--border);border-radius:10px;padding:13px 14px}
+.stat-val{font-size:22px;font-weight:800;color:var(--gold);line-height:1.1}
+.stat-label{font-size:10px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+
+/* ── ALERT BANNER ── */
+.alert-banner{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25);border-radius:12px;padding:14px 18px;margin-bottom:18px;font-size:13px;color:#fca5a5;line-height:1.6}
+.alert-banner strong{color:var(--red)}
+
+/* ── SECTION HEADING ── */
+.sh{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:26px 0 12px;display:flex;align-items:center;gap:10px}
+.sh::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── SNAPSHOT 3-COL ── */
+.snap3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:4px}
+@media(max-width:580px){.snap3{grid-template-columns:1fr}}
+.scard{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px}
+.scard.active{border-color:rgba(228,168,26,.35);background:#0f1f38}
+.scard.target-card{border-color:rgba(34,197,94,.2)}
+.snap-pill{display:inline-block;border-radius:5px;padding:2px 9px;font-size:10px;font-weight:700;letter-spacing:.04em;margin-bottom:11px}
+.pill-origin{background:#0f1729;color:#94a3b8}
+.pill-now{background:rgba(228,168,26,.14);color:var(--gold)}
+.pill-target{background:rgba(34,197,94,.1);color:var(--green)}
+.srow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #0b1525;font-size:12.5px}
+.srow:last-child{border-bottom:none}
+.sk{color:var(--muted)}
+.sv{font-weight:600}
+
+/* ── UWORLD TABLE ── */
+.tbl-wrap{overflow-x:auto;margin-bottom:4px;border:1px solid var(--border);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:9px 13px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);background:#0b1525}
+td{padding:9px 13px;border-bottom:1px solid #0b1525}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:rgba(255,255,255,.02)}
+.row-active td{background:rgba(228,168,26,.04)}
+.row-active td:first-child{color:var(--gold);font-weight:700}
+.sc-s{color:var(--green);font-weight:700}
+.sc-b{color:var(--blue);font-weight:600}
+.sc-w{color:var(--amber);font-weight:600}
+.sc-r{color:var(--red);font-weight:600}
+.sc-n{color:var(--dim)}
+.badge{display:inline-block;border-radius:5px;padding:2px 9px;font-size:11px;font-weight:600}
+.bg-s{background:var(--green-bg);color:var(--green)}
+.bg-b{background:var(--blue-bg);color:var(--blue)}
+.bg-w{background:var(--amber-bg);color:var(--amber)}
+.bg-r{background:var(--red-bg);color:var(--red)}
+.bg-a{background:rgba(228,168,26,.12);color:var(--gold);border:1px solid rgba(228,168,26,.25)}
+
+/* ── NBME TABLE ── */
+.nbme-empty{text-align:center;padding:30px;color:var(--dim);font-style:italic;font-size:13px}
+
+/* ── PLAN CARD ── */
+.plan-card{background:var(--surface);border:1px solid rgba(228,168,26,.22);border-radius:13px;padding:20px 22px;margin-bottom:4px}
+.plan-title{font-size:17px;font-weight:800;color:var(--gold);margin-bottom:2px}
+.plan-sub{font-size:12px;color:var(--muted);margin-bottom:14px}
+.prog-bar{height:5px;background:var(--border);border-radius:3px;margin-bottom:6px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),#f59e0b);border-radius:3px}
+.prog-label{font-size:11px;color:var(--dim);margin-bottom:18px}
+.day-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #0b1525;font-size:13px}
+.day-item:last-child{border-bottom:none}
+.day-dot{width:34px;height:34px;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
+.day-dot .dl{font-size:10px;font-weight:700}
+.day-dot .dd{font-size:9px;margin-top:1px}
+.d-done{background:var(--green-bg);color:var(--green)}
+.d-today{background:rgba(228,168,26,.14);color:var(--gold);border:1px solid rgba(228,168,26,.3)}
+.d-next{background:#0b1525;color:var(--dim)}
+.d-win{background:var(--green-bg);color:var(--green)}
+.day-content{flex:1}
+.day-main{line-height:1.5;font-size:13px}
+.day-date{font-size:11px;color:var(--dim);margin-top:2px}
+.day-check{font-size:13px;align-self:center;flex-shrink:0}
+.daily-rule{margin-top:14px;background:rgba(228,168,26,.05);border:1px solid rgba(228,168,26,.12);border-radius:8px;padding:11px 14px;font-size:12.5px;color:#94a3b8}
+
+/* ── STRENGTHS GRID ── */
+.sw2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px}
+@media(max-width:480px){.sw2{grid-template-columns:1fr}}
+.sw-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.sw-head{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:11px}
+.sw-head.g{color:var(--green)}
+.sw-head.a{color:var(--amber)}
+.chip{display:inline-block;border-radius:5px;padding:3px 10px;font-size:12px;font-weight:600;margin:3px 3px 0 0}
+.ch-g{background:var(--green-bg);color:var(--green)}
+.ch-a{background:var(--amber-bg);color:var(--amber)}
+.ch-r{background:var(--red-bg);color:var(--red)}
+
+/* ── JOURNEY ── */
+.journey-card{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:20px 22px;margin-bottom:4px}
+.jquote{font-size:13.5px;font-style:italic;color:#94a3b8;border-left:3px solid var(--gold);padding-left:14px;margin-bottom:18px;line-height:1.65}
+.jrow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #0b1525;font-size:13px}
+.jrow:last-child{border-bottom:none}
+.jlbl{color:var(--muted);font-size:12px;width:130px;flex-shrink:0}
+.jfrom{color:#94a3b8}
+.jarr{color:rgba(228,168,26,.5);font-size:11px;flex-shrink:0}
+.jto{color:var(--gold);font-weight:600}
+.jto.tbd{color:var(--dim);font-style:italic;font-weight:400}
+
+/* ── FOOTER ── */
+.foot{text-align:center;font-size:11px;color:#1e3557;margin-top:50px;padding-top:18px;border-top:1px solid #0b1525}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">USMLE Vault</div>
+  <div class="meta">Step 1 · Last updated: Jun 2, 2026</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-name">Victor Ofili</div>
+  <div class="hero-contact">+1 657-582-7471 · vicuzo297@gmail.com · PST · Daily check-in at 7:00 AM</div>
+  <div class="countdown-pill">⏱ 45 days remaining · Exam: July 17, 2026</div>
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-val" style="color:var(--red)">44%</div>
+      <div class="stat-label">UWorld Avg</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">1</div>
+      <div class="stat-label">NBMEs Taken</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" style="color:var(--amber)">100%</div>
+      <div class="stat-label">UWorld Done</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">Wk 1 · D1</div>
+      <div class="stat-label">Current Phase</div>
+    </div>
+  </div>
+</div>
+
+<!-- CRITICAL CONTEXT BANNER -->
+<div class="alert-banner">
+  <strong>⚠️ Critical context:</strong> Victor has completed 100% of UWorld but scored only 44% overall — the result of 3 months of <em>random blocks</em> with no system-based review. UWorld is not the lever right now. <strong>The next 5 days are Sketchy Microbiology — no questions until Sketchy is done.</strong>
+</div>
+
+<!-- SNAPSHOT -->
+<div class="sh">Snapshot</div>
+<div class="snap3">
+
+  <div class="scard">
+    <div class="snap-pill pill-origin">📍 Origin — Jun 1</div>
+    <div class="srow"><span class="sk">UWorld avg</span><span class="sv" style="color:var(--red)">44%</span></div>
+    <div class="srow"><span class="sk">UWorld done</span><span class="sv" style="color:var(--amber)">100% — all random</span></div>
+    <div class="srow"><span class="sk">NBME 28</span><span class="sv" style="color:var(--red)">~48%</span></div>
+    <div class="srow"><span class="sk">Worst areas</span><span class="sv">Biochem 22% · Immuno 30%</span></div>
+    <div class="srow"><span class="sk">Sketchy</span><span class="sv">Stopped at gram-pos</span></div>
+    <div class="srow"><span class="sk">Study state</span><span class="sv" style="color:var(--red)">Random · no structure</span></div>
+  </div>
+
+  <div class="scard active">
+    <div class="snap-pill pill-now">⚡ Now — Jun 2</div>
+    <div class="srow"><span class="sk">UWorld avg</span><span class="sv" style="color:var(--amber)">44%</span></div>
+    <div class="srow"><span class="sk">Active focus</span><span class="sv" style="color:var(--gold)">Sketchy Micro 🔵</span></div>
+    <div class="srow"><span class="sk">Today</span><span class="sv" style="color:var(--gold)">DNA Viruses</span></div>
+    <div class="srow"><span class="sk">Week</span><span class="sv">Week 1 of plan</span></div>
+    <div class="srow"><span class="sk">Streak</span><span class="sv" style="color:var(--gold)">Day 1 →</span></div>
+    <div class="srow"><span class="sk">Momentum</span><span class="sv" style="color:var(--gold)">Starting fresh</span></div>
+  </div>
+
+  <div class="scard target-card">
+    <div class="snap-pill pill-target">🎯 Target — Jul 17</div>
+    <div class="srow"><span class="sk">UWorld avg</span><span class="sv" style="color:var(--green)">&gt;65%</span></div>
+    <div class="srow"><span class="sk">Sketchy Micro</span><span class="sv" style="color:var(--green)">100% complete</span></div>
+    <div class="srow"><span class="sk">NBMEs done</span><span class="sv" style="color:var(--green)">2–3 complete</span></div>
+    <div class="srow"><span class="sk">Biochem</span><span class="sv" style="color:var(--green)">&gt;55%</span></div>
+    <div class="srow"><span class="sk">Immunology</span><span class="sv" style="color:var(--green)">&gt;60%</span></div>
+    <div class="srow"><span class="sk">Outcome</span><span class="sv" style="color:var(--green)">PASS</span></div>
+  </div>
+
+</div>
+
+<!-- UWORLD BREAKDOWN -->
+<div class="sh">UWorld Score Breakdown (100% Complete)</div>
+<div class="tbl-wrap">
+<table>
+<thead>
+<tr>
+  <th>System</th>
+  <th>Completed</th>
+  <th>Score</th>
+  <th>Status</th>
+  <th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Ethics / Biostats</td><td class="sc-n">Done</td><td class="sc-s">80%</td><td><span class="badge bg-s">✅ Strong</span></td><td class="sc-n" style="font-size:12px">Strongest system — recently reviewed</td></tr>
+<tr><td>Psychiatry</td><td class="sc-n">Done</td><td class="sc-s">65%</td><td><span class="badge bg-s">✅ Strong</span></td><td class="sc-n" style="font-size:12px">Done 6 months ago — holds well</td></tr>
+<tr><td>General Pharmacology</td><td class="sc-n">Done</td><td class="sc-n">—</td><td><span class="badge bg-b">🔄 Done</span></td><td class="sc-n" style="font-size:12px">Score not recorded on call</td></tr>
+<tr><td>General Pathology</td><td class="sc-n">Done</td><td class="sc-n">—</td><td><span class="badge bg-b">🔄 Done</span></td><td class="sc-n" style="font-size:12px">Score not recorded on call</td></tr>
+<tr><td>Cardiology</td><td class="sc-n">Done</td><td class="sc-n">—</td><td><span class="badge bg-b">🔄 Done</span></td><td class="sc-n" style="font-size:12px">Score not recorded on call</td></tr>
+<tr><td>Hematology / Onc</td><td class="sc-n">Done</td><td class="sc-n">—</td><td><span class="badge bg-b">🔄 Done</span></td><td class="sc-n" style="font-size:12px">Score not recorded on call</td></tr>
+<tr><td>Renal</td><td class="sc-n">Done</td><td class="sc-n">—</td><td><span class="badge bg-b">🔄 Done</span></td><td class="sc-n" style="font-size:12px">Score not recorded on call</td></tr>
+<tr><td>Respiratory</td><td class="sc-n">Done</td><td class="sc-n">—</td><td><span class="badge bg-b">🔄 Done</span></td><td class="sc-n" style="font-size:12px">Score not recorded on call</td></tr>
+<tr><td>GIT / Gastrointestinal</td><td class="sc-n">Done</td><td class="sc-n">—</td><td><span class="badge bg-b">🔄 Done</span></td><td class="sc-n" style="font-size:12px">Score not recorded on call</td></tr>
+<tr><td>Endocrine</td><td class="sc-n">Done</td><td class="sc-w">51%</td><td><span class="badge bg-w">⚠️ Weak</span></td><td class="sc-n" style="font-size:12px">Completed last month</td></tr>
+<tr><td>Biostats &amp; Epidemiology</td><td class="sc-n">Done</td><td class="sc-w">40%</td><td><span class="badge bg-w">⚠️ Weak</span></td><td class="sc-n" style="font-size:12px">Done 7 months ago — retention low</td></tr>
+<tr><td>Immunology</td><td class="sc-n">Done</td><td class="sc-r">30%</td><td><span class="badge bg-r">❌ Critical</span></td><td class="sc-n" style="font-size:12px">Done 2 months ago — major gap</td></tr>
+<tr><td>Biochemistry &amp; Genetics</td><td class="sc-n">Done</td><td class="sc-r">22%</td><td><span class="badge bg-r">❌ Critical</span></td><td class="sc-n" style="font-size:12px">Done 5–6 months ago — lowest score</td></tr>
+<tr class="row-active"><td>Microbiology ← Active</td><td style="color:var(--gold)">Sketchy in progress</td><td class="sc-n">—</td><td><span class="badge bg-a">🔵 Week 1</span></td><td style="color:var(--gold);font-size:12px">5-day Sketchy plan → Jun 2–6</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- NBME TRACKER -->
+<div class="sh">NBME Tracker</div>
+<div class="tbl-wrap">
+<table>
+<thead>
+<tr>
+  <th>NBME</th>
+  <th>Date Taken</th>
+  <th>Score</th>
+  <th>Δ vs Previous</th>
+  <th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>NBME 28</td>
+  <td class="sc-n">~May 18, 2026</td>
+  <td class="sc-r">~48%</td>
+  <td class="sc-n">—</td>
+  <td class="sc-n" style="font-size:12px">Baseline — taken before structured plan</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- CURRENT PLAN -->
+<div class="sh">Current Plan</div>
+<div class="plan-card">
+  <div class="plan-title">Week 1 — Sketchy Microbiology</div>
+  <div class="plan-sub">Jun 2–6, 2026 · Method: Sketchy videos → Vault pages → Vault MCQs · No random UWorld blocks this week</div>
+  <div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div>
+  <div class="prog-label">Day 1 of 5 · Target: Full Sketchy Microbiology done by June 6</div>
+
+  <div class="day-item">
+    <div class="day-dot d-today"><span class="dl">TUE</span><span class="dd">2</span></div>
+    <div class="day-content">
+      <div class="day-main" style="font-weight:600">
+        1. Watch "How to do Sketchy" video in University section<br>
+        2. Download Sketchy Micro PDF + systemized image (sent via email)<br>
+        3. Watch all <strong>DNA Virus</strong> Sketchy videos<br>
+        4. Complete Vault Microbiology pages <strong>161–163</strong> + all MCQs<br>
+        5. Call Dr. Marish in the morning for progress update
+      </div>
+      <div class="day-date" style="color:var(--gold)">Jun 2 · TODAY · DNA Viruses</div>
+    </div>
+    <div class="day-check" style="color:var(--gold)">→</div>
+  </div>
+
+  <div class="day-item">
+    <div class="day-dot d-next"><span class="dl">WED</span><span class="dd">3</span></div>
+    <div class="day-content">
+      <div class="day-main" style="color:var(--dim)">Watch all <strong>RNA Virus</strong> Sketchy videos · Complete corresponding Vault microbiology sections + all MCQs</div>
+      <div class="day-date">Jun 3 · RNA Viruses</div>
+    </div>
+  </div>
+
+  <div class="day-item">
+    <div class="day-dot d-next"><span class="dl">THU</span><span class="dd">4</span></div>
+    <div class="day-content">
+      <div class="day-main" style="color:var(--dim)">Watch all <strong>Gram-Negative Bacteria</strong> Sketchy videos · Complete corresponding Vault microbiology sections + all MCQs</div>
+      <div class="day-date">Jun 4 · Gram-Negative Bacteria</div>
+    </div>
+  </div>
+
+  <div class="day-item">
+    <div class="day-dot d-next"><span class="dl">FRI</span><span class="dd">5</span></div>
+    <div class="day-content">
+      <div class="day-main" style="color:var(--dim)">Watch all <strong>Parasites</strong> Sketchy videos · Complete corresponding Vault microbiology sections + all MCQs</div>
+      <div class="day-date">Jun 5 · Parasites</div>
+    </div>
+  </div>
+
+  <div class="day-item" style="border-bottom:none">
+    <div class="day-dot d-win"><span class="dl">SAT</span><span class="dd">6</span></div>
+    <div class="day-content">
+      <div class="day-main" style="color:var(--green);font-weight:700">Watch all <strong>Fungi</strong> Sketchy videos · Complete Vault sections + MCQs<br>🎯 Sketchy Microbiology — COMPLETE</div>
+      <div class="day-date">Jun 6 · Fungi · Target: Sketchy Micro fully done</div>
+    </div>
+  </div>
+
+  <div class="daily-rule">
+    <strong style="color:var(--gold)">Daily non-negotiable:</strong> Call Dr. Marish every morning with a progress update. No random UWorld blocks this week — Sketchy only. Send confirmation message after each day's Sketchy + Vault section is done. Check-in at 7:00 AM PST daily.
+  </div>
+</div>
+
+<!-- STRENGTHS & WEAK AREAS -->
+<div class="sh">Strengths &amp; Weak Areas</div>
+<div class="sw2">
+  <div class="sw-card">
+    <div class="sw-head g">✅ Holding Up</div>
+    <span class="chip ch-g">Ethics 80%</span>
+    <span class="chip ch-g">Psychiatry 65%</span>
+    <span class="chip ch-a">Endocrine 51%</span>
+    <span class="chip ch-a">Biostats 40%</span>
+  </div>
+  <div class="sw-card">
+    <div class="sw-head a">❌ Critical Gaps</div>
+    <span class="chip ch-r">Biochemistry 22%</span>
+    <span class="chip ch-r">Immunology 30%</span>
+    <span class="chip ch-r">Microbiology (active)</span>
+    <span class="chip ch-a">Genetics (low)</span>
+    <span class="chip ch-a">Inconsistency</span>
+  </div>
+</div>
+
+<!-- THE JOURNEY -->
+<div class="sh">The Journey</div>
+<div class="journey-card">
+  <div class="jquote">"80% ready — I'm serious but need clarity on fit." — Victor Ofili, Jun 1, 2026 · <em>Now he has the plan. Time to execute.</em></div>
+
+  <div class="jrow">
+    <span class="jlbl">Joined Vault</span>
+    <span class="jfrom">Jun 1, 2026</span>
+    <span class="jarr">→</span>
+    <span class="jto">Day 2 of mentorship</span>
+  </div>
+  <div class="jrow">
+    <span class="jlbl">UWorld avg</span>
+    <span class="jfrom" style="color:var(--red)">44% (100% done)</span>
+    <span class="jarr">→</span>
+    <span class="jto tbd">Rebuilding — Sketchy first</span>
+  </div>
+  <div class="jrow">
+    <span class="jlbl">NBME score</span>
+    <span class="jfrom" style="color:var(--red)">~48% (NBME 28)</span>
+    <span class="jarr">→</span>
+    <span class="jto tbd">Next NBME after Sketchy phase</span>
+  </div>
+  <div class="jrow">
+    <span class="jlbl">Study method</span>
+    <span class="jfrom" style="color:var(--red)">Random blocks · no plan</span>
+    <span class="jarr">→</span>
+    <span class="jto">System-based · daily accountability</span>
+  </div>
+  <div class="jrow">
+    <span class="jlbl">Microbiology</span>
+    <span class="jfrom">Stopped at gram-pos</span>
+    <span class="jarr">→</span>
+    <span class="jto">Full Sketchy Micro by Jun 6</span>
+  </div>
+  <div class="jrow">
+    <span class="jlbl">Biggest risk</span>
+    <span class="jfrom" style="color:var(--red)">45 days · 44% avg</span>
+    <span class="jarr">→</span>
+    <span class="jto tbd">Every day must count — no more random</span>
+  </div>
+  <div class="jrow">
+    <span class="jlbl">Before Vault</span>
+    <span class="jfrom">6+ months · solo · inconsistent</span>
+    <span class="jarr">→</span>
+    <span class="jto" style="color:var(--text);font-weight:400">Structure, Sketchy, daily check-ins</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="foot">
+  USMLE Vault · Step 1 · Victor Ofili<br>
+  Updated weekly by CSM
+</div>
+
+</div>
+</body>
+</html>
